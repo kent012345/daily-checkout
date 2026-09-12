@@ -290,7 +290,7 @@
       + sectionBlock(5,'nextDay','Next-Day Priorities','What is queued up next.', true)
       + '<div class="section attach-section">'
       + '<div class="section-head"><span class="num">+</span><div><h3>Attachments <span class="opt">Optional</span></h3>'
-      + '<p class="helper">Photos, PDFs, documents, or video (MP4, MPEG, MOV) — up to 100MB each. Sent straight to Slack.</p></div></div>'
+      + '<p class="helper">Photos, PDFs, and documents up to 4MB are sent straight to Slack. Larger files (like most videos) will be called out in the message so you can share them separately.</p></div></div>'
       + '<div class="dropzone" id="dropzone"><p>Drag files here, or</p>'
       + '<button type="button" id="chooseFileBtn" class="ghost-btn">Choose files</button>'
       + '<input type="file" id="fileInput" multiple hidden accept="image/*,.heic,.heif,.png,.jpg,.jpeg,.webp,.dng,.arw,application/pdf,.doc,.docx,video/mp4,video/mpeg,video/quicktime,.mov"></div>'
@@ -456,9 +456,24 @@
     return lines.join('\n');
   }
 
+  // Vercel Functions cap request bodies at ~4.5MB. Browsers can't upload
+  // straight to Slack's upload_url either (Slack doesn't send CORS headers
+  // for it), so small files get relayed through our own /api/slack-upload,
+  // and anything too big to relay is called out in the message instead of
+  // silently failing the whole submission.
+  const MAX_PROXY_UPLOAD_SIZE = 4 * 1024 * 1024;
+
   async function pushToSlack(entry){
-    const text = buildSlackText(entry);
-    const sendable = (entry.attachments||[]).filter(a => a.tempId && rawFileStore[a.tempId]);
+    const attachments = entry.attachments || [];
+    const sendable = attachments.filter(a => a.tempId && rawFileStore[a.tempId] && a.size <= MAX_PROXY_UPLOAD_SIZE);
+    const oversized = attachments.filter(a => a.tempId && rawFileStore[a.tempId] && a.size > MAX_PROXY_UPLOAD_SIZE);
+
+    let text = buildSlackText(entry);
+    if(oversized.length){
+      text += '\n\n*Not attached (too large to send automatically):*\n'
+        + oversized.map(a=>'• '+a.name+' ('+fileSize(a.size)+') — please share separately').join('\n');
+    }
+
     const startRes = await fetch('/api/slack-start', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ text, files: sendable.map(a=>({ tempId:a.tempId, name:a.name, size:a.size })) })
@@ -467,25 +482,46 @@
     if(!startRes.ok) throw new Error(startData.error || 'slack-start failed');
     if(startData.done) return;
 
+    const succeeded = [];
+    const failedNames = [];
     for(const u of startData.uploads){
       const file = rawFileStore[u.tempId];
       if(!file) continue;
-      const form = new FormData();
-      form.append('file', file, file.name);
-      let putRes;
       try{
-        putRes = await fetch(u.upload_url, { method:'POST', body:form });
-      }catch(networkErr){
-        throw new Error('Could not reach Slack to upload ' + u.name + ' (network/CORS error). Text will still be sent without this file.');
+        const putRes = await fetch('/api/slack-upload?url='+encodeURIComponent(u.upload_url), {
+          method:'POST', body: file
+        });
+        if(!putRes.ok){
+          const err = await putRes.json().catch(()=>({}));
+          throw new Error(err.error || ('HTTP '+putRes.status));
+        }
+        succeeded.push(u);
+      }catch(e){
+        console.error('upload failed for '+u.name, e);
+        failedNames.push(u.name);
       }
-      if(!putRes.ok) throw new Error('Slack rejected the upload for '+u.name+' (HTTP '+putRes.status+').');
     }
-    const finishRes = await fetch('/api/slack-finish', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ text, files: startData.uploads.map(u=>({ file_id:u.file_id, name:u.name })) })
-    });
-    const finishData = await finishRes.json();
-    if(!finishRes.ok) throw new Error(finishData.error || 'slack-finish failed');
+
+    let finalText = text;
+    if(failedNames.length){
+      finalText += '\n\n*Could not attach (upload failed):*\n' + failedNames.map(n=>'• '+n).join('\n');
+    }
+
+    if(succeeded.length){
+      const finishRes = await fetch('/api/slack-finish', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ text: finalText, files: succeeded.map(u=>({ file_id:u.file_id, name:u.name })) })
+      });
+      const finishData = await finishRes.json();
+      if(!finishRes.ok) throw new Error(finishData.error || 'slack-finish failed');
+    } else if(failedNames.length || oversized.length){
+      const postRes = await fetch('/api/slack-start', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ text: finalText, files: [] })
+      });
+      const postData = await postRes.json();
+      if(!postRes.ok) throw new Error(postData.error || 'slack post failed');
+    }
   }
 
   async function submitEntry(){
