@@ -1,9 +1,11 @@
 // api/checkout-save.js
 //
 // Saves one day's checkout entry to Vercel Blob storage, keyed by date.
-// This project's store is Private, so blobs are saved with access:'private'
-// and can only be read back through checkout-get.js (which attaches the
-// auth token itself), never via a bare public URL.
+// This account's Blob store only supports 'public' access (private access
+// isn't available on this plan), so blobs are readable by anyone with the
+// exact URL -- but that URL is never listed or linked publicly, and
+// checkout-get.js/checkout-list.js are still the only intended way to
+// reach this data from the app.
 
 const { put } = require('@vercel/blob');
 
@@ -30,7 +32,7 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: 'No Blob auth (token or store id) found in this project.' });
     }
     const blob = await put('checkout/' + date + '.json', JSON.stringify(entry), Object.assign({
-      access: 'private',
+      access: 'public',
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: 'application/json'
