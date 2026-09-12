@@ -57,9 +57,14 @@
     padding: 30px 34px; animation: rise .35s ease;
   }
   @keyframes rise{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none;} }
-  .card-head{ margin-bottom: 20px; padding-bottom:16px; border-bottom: 1px solid var(--line); }
+  .card-head{ margin-bottom: 20px; padding-bottom:16px; border-bottom: 1px solid var(--line); display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:10px 16px; }
   .card-head h2{ font-size: 23px; font-weight:600; }
-  .submitted-note{ margin: 6px 0 0; font-size: 13px; color: var(--ink-soft); }
+  .date-picker{ font-size:13px; color: var(--ink-soft); display:flex; align-items:center; gap:8px; white-space:nowrap; }
+  .date-input{
+    background: var(--bg-input); color: var(--ink); border:1px solid var(--line);
+    border-radius:6px; padding:5px 8px; font-size:13px; font-family:'Jost',sans-serif; color-scheme: dark;
+  }
+  .submitted-note{ margin: 6px 0 0; font-size: 13px; color: var(--ink-soft); flex-basis:100%; }
 
   .section{ padding: 20px 0; border-bottom: 1px solid var(--line); }
   .section:last-of-type{ border-bottom:none; }
@@ -209,9 +214,13 @@
   const $$ = (sel, ctx) => Array.from((ctx||document).querySelectorAll(sel));
 
   const todayDate = new Date();
+  let selectedDate = new Date();
   let currentAttachments = [];
   let rawFileStore = {};
 
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function toISODate(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function parseISODate(s){ const p = s.split('-').map(Number); return new Date(p[0], p[1]-1, p[2]); }
   function formatLong(d){ return d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }); }
   function fileSize(bytes){
     if(bytes < 1024) return bytes + ' B';
@@ -280,14 +289,18 @@
   function renderForm(){
     currentAttachments = [];
     rawFileStore = {};
+    selectedDate = new Date();
     $('#main').innerHTML =
       '<div class="card">'
-      + '<div class="card-head"><h2>'+formatLong(todayDate)+'</h2></div>'
+      + '<div class="card-head">'
+      + '<h2 id="entryDateHeading">'+formatLong(selectedDate)+'</h2>'
+      + '<label class="date-picker">Wrong day? <input type="date" id="entryDateInput" class="date-input" value="'+toISODate(selectedDate)+'"></label>'
+      + '</div>'
       + sectionBlock(1,'contentProduced','Content Produced','What was created today.', false)
       + sectionBlock(2,'outreach','Outreach &amp; Follow-Up','Leads contacted, calls made, and anything time-sensitive.', false)
       + sectionBlock(3,'published','Published &amp; Live','What went out today, and the links, if any.', false)
       + sectionBlock(4,'blockers','Blockers &amp; Requests','Anything you are waiting on from the team.', true)
-      + sectionBlock(5,'nextDay','Next-Day Priorities','What is queued up next.', true)
+      + sectionBlock(5,'nextDay','Next-Day Priorities','What is queued up next.', false)
       + '<div class="section attach-section">'
       + '<div class="section-head"><span class="num">+</span><div><h3>Attachments <span class="opt">Optional</span></h3>'
       + '<p class="helper">Photos, PDFs, and documents up to 4MB are sent straight to Slack. Larger files (like most videos) will be called out in the message so you can share them separately.</p></div></div>'
@@ -429,6 +442,12 @@
   function wireForm(){
     ['contentProduced','outreach','published','blockers','nextDay','videoLinks'].forEach(wireRichEditor);
 
+    $('#entryDateInput').addEventListener('change', (e)=>{
+      if(!e.target.value) return;
+      selectedDate = parseISODate(e.target.value);
+      $('#entryDateHeading').textContent = formatLong(selectedDate);
+    });
+
     const dz = $('#dropzone');
     const fi = $('#fileInput');
     $('#chooseFileBtn').addEventListener('click', ()=> fi.click());
@@ -545,7 +564,7 @@
     btn.disabled = true;
     btn.textContent = 'Sending...';
     const entry = {
-      date: formatLong(todayDate),
+      date: formatLong(selectedDate),
       sections: sections,
       attachments: currentAttachments
     };
@@ -564,7 +583,7 @@
   function renderSent(){
     $('#main').innerHTML =
       '<div class="card">'
-      + '<div class="card-head"><h2>'+formatLong(todayDate)+'</h2>'
+      + '<div class="card-head"><h2>'+formatLong(selectedDate)+'</h2>'
       + '<p class="submitted-note">Sent to Slack '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</p>'
       + '</div>'
       + '<p class="read-text">This checkout has been posted. Need to log another one?</p>'
