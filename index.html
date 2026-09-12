@@ -23,7 +23,7 @@
     --radius: 12px;
   }
   *{ box-sizing: border-box; }
-  html,body{ height:100%; overflow:hidden; }
+  html,body{ min-height:100%; }
   body{
     margin:0;
     background: var(--bg);
@@ -34,99 +34,32 @@
     font-weight: 400;
   }
   h1,h2,h3{ font-family:'Jost', sans-serif; margin:0; font-weight:600; color: var(--ink); letter-spacing:0.2px; }
-  #app{ display:flex; flex-direction:column; height:100vh; }
 
   .metallic-text{
     background: linear-gradient(120deg, var(--gold-deep) 0%, var(--gold-light) 42%, var(--gold) 58%, var(--gold-deep) 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--gold);
   }
 
-  /* ---------- Topbar ---------- */
   .topbar{
     display:flex; align-items:center; justify-content:space-between;
     padding: 18px 28px;
     background: var(--bg-raised);
     border-bottom: 1px solid var(--gold-deep);
   }
-  .topbar .brand{ display:flex; align-items:baseline; gap:14px; }
   .topbar h1{ font-size:27px; letter-spacing:0.5px; font-weight:700; }
   .topbar .tagline{ font-size:13px; color: var(--ink-soft); margin:0; letter-spacing:0.3px; }
   .topbar .today-label{ font-size:13px; color: var(--ink-soft); text-align:right; }
-  .menu-btn{
-    display:none; background:none; border:1px solid var(--gold-deep); color: var(--gold-light);
-    border-radius:8px; padding:6px 10px; font-size:14px; cursor:pointer;
-  }
 
-  /* ---------- Layout ---------- */
-  .layout{ flex:1; display:flex; min-height:0; }
-  .sidebar{
-    width: 300px; flex-shrink:0;
-    background: var(--bg-raised);
-    border-right: 1px solid var(--line);
-    padding: 20px 16px;
-    overflow-y:auto;
-  }
-  .sidebar-head{
-    font-size:12px; text-transform:uppercase; font-weight:600;
-    letter-spacing:1.5px; color: var(--gold-light); margin-bottom:12px;
-  }
-  .today-btn{
-    width:100%; text-align:left; background: rgba(212,175,55,0.12);
-    border: 1px solid var(--gold-deep); color: var(--gold-light);
-    font-weight:600; padding:10px 12px; border-radius: var(--radius);
-    cursor:pointer; margin-bottom:18px; font-size:14px; font-family:'Jost',sans-serif;
-  }
-  .today-btn:hover{ background: rgba(212,175,55,0.2); }
-
-  details.month-node > summary{
-    font-size:15px; font-weight:600;
-    padding: 8px 4px; cursor:pointer; color: var(--ink);
-    list-style: none;
-  }
-  details.month-node > summary::-webkit-details-marker{ display:none; }
-  details.month-node > summary::before{ content:"\25B8 "; color: var(--gold); }
-  details.month-node[open] > summary::before{ content:"\25BE "; }
-
-  details.week-node{ margin-left: 10px; border-left: 1px solid var(--line-soft); padding-left:10px; }
-  details.week-node > summary{
-    font-size:13px; color: var(--ink-soft); padding:6px 4px; cursor:pointer; list-style:none;
-  }
-  details.week-node > summary::-webkit-details-marker{ display:none; }
-  details.week-node > summary::before{ content:"\203A "; }
-
-  ul.day-list{ list-style:none; margin:2px 0 8px 4px; padding:0; }
-  .day-btn{
-    display:flex; align-items:center; gap:8px; width:100%;
-    background:none; border:none; text-align:left; padding:6px 8px;
-    border-radius:8px; cursor:pointer; font-size:13.5px; color: var(--ink);
-    font-family:'Jost', sans-serif;
-  }
-  .day-btn:hover{ background: var(--line-soft); }
-  .day-btn.active{ background: rgba(212,175,55,0.14); font-weight:600; color: var(--gold-light); }
-  .dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .dot.filled{ background: var(--gold); }
-  .dot.today{ background: var(--gold-light); box-shadow: 0 0 0 2px rgba(242,226,168,0.25); }
-  .dot.empty{ background: transparent; border:1px solid var(--line); }
-  .tree-loading{ font-size:13px; color: var(--ink-soft); }
-  .tree-error{ font-size:12.5px; color: var(--danger); margin-top:10px; line-height:1.6; }
-  .tree-error button{
-    display:inline-block; margin-top:6px; background:none; border:1px solid var(--danger);
-    color: var(--danger); padding:5px 12px; border-radius:7px; font-size:12px; font-weight:600; cursor:pointer;
-  }
-
-  /* ---------- Main ---------- */
-  .main{ flex:1; padding: 28px 32px 60px; overflow-y:auto; }
+  .main{ padding: 32px 32px 60px; display:flex; justify-content:center; }
   .card{
-    max-width: 740px; background: var(--bg-raised);
+    width:100%; max-width: 740px; background: var(--bg-raised);
     border:1px solid var(--line); border-radius: var(--radius);
     padding: 30px 34px; animation: rise .35s ease;
   }
   @keyframes rise{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none;} }
   .card-head{ margin-bottom: 20px; padding-bottom:16px; border-bottom: 1px solid var(--line); }
   .card-head h2{ font-size: 23px; font-weight:600; }
-  .backdate-note, .submitted-note{ margin: 6px 0 0; font-size: 13px; color: var(--ink-soft); }
-  .empty-card{ text-align:left; }
-  .empty-card p{ color: var(--ink-soft); margin: 10px 0 18px; }
+  .submitted-note{ margin: 6px 0 0; font-size: 13px; color: var(--ink-soft); }
 
   .section{ padding: 20px 0; border-bottom: 1px solid var(--line); }
   .section:last-of-type{ border-bottom:none; }
@@ -144,7 +77,6 @@
   }
   .helper{ margin: 2px 0 0; font-size:13px; color: var(--ink-soft); }
 
-  /* ---------- Rich text editor ---------- */
   .rt-toolbar{
     display:flex; align-items:center; flex-wrap:wrap; gap:4px;
     margin-top:12px; padding:6px; background: var(--bg-input);
@@ -229,37 +161,24 @@
     border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:13.5px;
   }
   .attach-icon{ font-size:16px; }
-  .attach-name{ font-weight:600; flex-shrink:0; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .attach-name{ font-weight:600; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .attach-size{ color: var(--ink-soft); font-size:12px; flex-shrink:0; }
-  .attach-body{ flex:1; min-width:0; }
-  .attach-body a{ color: var(--gold-light); font-weight:600; }
-  .link-input{
-    width:100%; padding:6px 9px; border:1px solid var(--line); border-radius:6px; font-size:13px;
-    background: var(--bg); color: var(--ink); font-family:'Jost',sans-serif;
-  }
   .remove-btn{ background:none; border:none; color: var(--danger); cursor:pointer; font-size:14px; flex-shrink:0; }
-  .attach-list.read-only .remove-btn{ display:none; }
 
   .submit-row{ display:flex; align-items:center; gap:14px; margin-top:22px; }
   .save-status{ font-size:13px; color: var(--ink-soft); }
-  .loading{ color: var(--ink-soft); }
 
   .toast{
     position:fixed; bottom:24px; left:50%; transform: translateX(-50%);
     background: var(--bg-input); color: var(--ink); padding:11px 20px; border-radius:8px;
     border:1px solid var(--gold-deep);
     font-size:13.5px; box-shadow:0 10px 24px rgba(0,0,0,0.4); transition:opacity .2s;
+    max-width: 90vw;
   }
   .toast.hidden{ opacity:0; pointer-events:none; }
   .toast.error{ border-color: var(--danger); color: var(--danger); }
 
   @media (max-width: 780px){
-    .menu-btn{ display:inline-block; }
-    .sidebar{
-      position:fixed; top:0; left:0; bottom:0; z-index:20;
-      transform: translateX(-100%); transition: transform .2s; box-shadow: 4px 0 16px rgba(0,0,0,0.4);
-    }
-    .sidebar.open{ transform: translateX(0); }
     .main{ padding: 20px 16px 60px; }
     .card{ padding: 22px 18px; }
     .emoji-pop{ width: 220px; grid-template-columns: repeat(6,1fr); }
@@ -269,31 +188,18 @@
 <body>
 <div id="app">
   <header class="topbar">
-    <div class="brand">
-      <button class="menu-btn" id="menuBtn">&#9776; Archive</button>
-      <div>
-        <h1 class="metallic-text">Daily Checkout</h1>
-        <p class="tagline">Content, Outreach &amp; Publishing Log</p>
-      </div>
+    <div>
+      <h1 class="metallic-text">Daily Checkout</h1>
+      <p class="tagline">Content, Outreach &amp; Publishing Log</p>
     </div>
     <div class="today-label" id="todayLabel"></div>
   </header>
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-head">Archive</div>
-      <button class="today-btn" id="todayBtn">Go to Today</button>
-      <div id="tree" class="tree"></div>
-    </aside>
-    <main class="main" id="main"></main>
-  </div>
+  <main class="main" id="main"></main>
 </div>
 <div id="toast" class="toast hidden"></div>
 
 <script>
 (function(){
-  const STORAGE_PREFIX = 'checkout:';
-  const EMBED_LIMIT = 1.5 * 1024 * 1024;
-  const TOTAL_EMBED_BUDGET = 3 * 1024 * 1024;
   const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
   const EMOJI_SET = ['✅','🔥','📸','🎥','📞','📈','💰','🎯','📌','⚠️','❗','👍','👎','🙌','💡','📝','📅','⏰','✨','🚀','🏆','🤝','📣','💬','🔗','📂','✔️','❌','🎉','😀','😊','💪','👀','😆','😂','🤣','😍','🤩','😎','🥳','🤔','😅','🙂','😉','🥰','🎵','🎶','🎧','🎸','🥁','📻','🔊','🌊','🧘','🧠','💵','💸','🤑','💎','👑','🏦','💹','🪙','🎊','🥂','🌟','⭐'];
@@ -303,26 +209,10 @@
   const $$ = (sel, ctx) => Array.from((ctx||document).querySelectorAll(sel));
 
   const todayDate = new Date();
-  const todayKey = dateKey(todayDate);
-
-  let currentDateStr = todayKey;
   let currentAttachments = [];
   let rawFileStore = {};
-  let entryCache = {};
-  let allKeys = [];
 
-  function pad(n){ return String(n).padStart(2,'0'); }
-  function dateKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-  function parseDateKey(k){ const p = k.split('-').map(Number); return new Date(p[0], p[1]-1, p[2]); }
   function formatLong(d){ return d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }); }
-  function formatShort(d){ return d.toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
-  function monthLabel(d){ return d.toLocaleDateString('en-US', { month:'long', year:'numeric' }); }
-  function weekBucket(d){ return Math.ceil(d.getDate()/7); }
-  function weekRangeLabel(year, month, bucket){
-    const start = (bucket-1)*7 + 1;
-    const end = Math.min(start+6, new Date(year, month+1, 0).getDate());
-    return 'Week '+bucket+' \u00B7 '+formatShort(new Date(year,month,start))+'\u2013'+formatShort(new Date(year,month,end));
-  }
   function fileSize(bytes){
     if(bytes < 1024) return bytes + ' B';
     if(bytes < 1024*1024) return (bytes/1024).toFixed(0) + ' KB';
@@ -331,58 +221,9 @@
   function htmlToText(html){
     const div = document.createElement('div');
     div.innerHTML = html || '';
-    div.querySelectorAll('li').forEach(li => li.insertAdjacentText('afterbegin', '\u2022 '));
+    div.querySelectorAll('li').forEach(li => li.insertAdjacentText('afterbegin', '• '));
     div.querySelectorAll('br,p,div,li').forEach(el => el.insertAdjacentText('afterend', '\n'));
     return div.textContent.replace(/\n{3,}/g,'\n\n').trim();
-  }
-
-  function wait(ms){ return new Promise(res=>setTimeout(res,ms)); }
-
-  async function listKeys(attempt){
-    attempt = attempt || 0;
-    try{
-      const r = await fetch('/api/checkout-list');
-      if(!r.ok) throw new Error('list failed: '+r.status);
-      const data = await r.json();
-      return { ok:true, keys: data.dates || [] };
-    }catch(e){
-      if(attempt < 2){ await wait(500 * (attempt+1)); return listKeys(attempt+1); }
-      console.error('list failed', e);
-      return { ok:false, keys: [] };
-    }
-  }
-  async function loadEntry(dateStr, attempt){
-    attempt = attempt || 0;
-    if(dateStr in entryCache) return entryCache[dateStr];
-    try{
-      const r = await fetch('/api/checkout-get?date='+dateStr, { cache:'no-store' });
-      if(r.status === 404){ entryCache[dateStr] = null; return null; }
-      if(!r.ok) throw new Error('fetch entry failed: '+r.status);
-      const parsed = await r.json();
-      entryCache[dateStr] = parsed;
-      return parsed;
-    }catch(e){
-      if(attempt < 2){ await wait(500 * (attempt+1)); return loadEntry(dateStr, attempt+1); }
-      entryCache[dateStr] = null;
-      return null;
-    }
-  }
-  async function saveEntry(dateStr, obj){
-    try{
-      const r = await fetch('/api/checkout-save', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ date: dateStr, entry: obj })
-      });
-      if(!r.ok){
-        let detail = '';
-        try{ const j = await r.json(); detail = j.error || ''; }catch(e){}
-        saveEntry.lastError = detail || ('HTTP '+r.status+(r.status===413 ? ' \u2014 too much data in one save (try removing an attachment)' : ''));
-        console.error('save failed', saveEntry.lastError);
-        return false;
-      }
-      entryCache[dateStr] = obj;
-      return true;
-    }catch(e){ saveEntry.lastError = String(e.message||e); console.error('save failed', e); return false; }
   }
 
   let toastTimer;
@@ -392,97 +233,6 @@
     t.className = 'toast show' + (isError ? ' error' : '');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(()=>{ t.className = 'toast hidden'; }, 3800);
-  }
-
-  async function refreshSidebar(){
-    const tree = $('#tree');
-    tree.innerHTML = '<p class="tree-loading">Loading archive...</p>';
-    const result = await listKeys();
-    allKeys = result.keys;
-    const dateSet = new Set(allKeys);
-    dateSet.add(todayKey);
-    const dates = Array.from(dateSet).sort().reverse();
-
-    const groups = {};
-    dates.forEach(ds => {
-      const d = parseDateKey(ds);
-      const ym = d.getFullYear()+'-'+pad(d.getMonth()+1);
-      if(!groups[ym]) groups[ym] = { year: d.getFullYear(), month: d.getMonth(), label: monthLabel(d), weeks: {} };
-      const wb = weekBucket(d);
-      if(!groups[ym].weeks[wb]) groups[ym].weeks[wb] = [];
-      groups[ym].weeks[wb].push(ds);
-    });
-
-    const monthKeysSorted = Object.keys(groups).sort().reverse();
-    tree.innerHTML = '';
-    monthKeysSorted.forEach((ym, mi) => {
-      const g = groups[ym];
-      const monthDetails = document.createElement('details');
-      monthDetails.open = (mi === 0);
-      monthDetails.className = 'month-node';
-      const monthSummary = document.createElement('summary');
-      monthSummary.textContent = g.label;
-      monthDetails.appendChild(monthSummary);
-
-      const weekBucketsSorted = Object.keys(g.weeks).map(Number).sort((a,b)=>b-a);
-      weekBucketsSorted.forEach((wb, wi) => {
-        const weekDetails = document.createElement('details');
-        weekDetails.open = (mi === 0 && wi === 0);
-        weekDetails.className = 'week-node';
-        const weekSummary = document.createElement('summary');
-        weekSummary.textContent = weekRangeLabel(g.year, g.month, wb);
-        weekDetails.appendChild(weekSummary);
-
-        const ul = document.createElement('ul');
-        ul.className = 'day-list';
-        g.weeks[wb].forEach(ds => {
-          const li = document.createElement('li');
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'day-btn' + (ds === currentDateStr ? ' active' : '');
-          const hasEntry = allKeys.includes(ds);
-          const dot = document.createElement('span');
-          dot.className = 'dot' + (hasEntry ? ' filled' : (ds === todayKey ? ' today' : ' empty'));
-          btn.appendChild(dot);
-          const label = document.createElement('span');
-          const d = parseDateKey(ds);
-          label.textContent = (ds === todayKey ? 'Today \u00B7 ' : '') + formatShort(d);
-          btn.appendChild(label);
-          btn.addEventListener('click', () => selectDate(ds));
-          li.appendChild(btn);
-          ul.appendChild(li);
-        });
-        weekDetails.appendChild(ul);
-        monthDetails.appendChild(weekDetails);
-      });
-      tree.appendChild(monthDetails);
-    });
-
-    if(!result.ok){
-      const notice = document.createElement('div');
-      notice.className = 'tree-error';
-      notice.innerHTML = 'Could not load past entries right now.<br><button type="button" id="retryArchive">Retry</button>';
-      tree.appendChild(notice);
-      $('#retryArchive').addEventListener('click', refreshSidebar);
-    }
-  }
-
-  async function selectDate(dateStr){
-    currentDateStr = dateStr;
-    renderMainLoading();
-    $$('.day-btn').forEach(b=>b.classList.remove('active'));
-    const entry = await loadEntry(dateStr);
-    if(entry){
-      renderReadOnly(dateStr, entry);
-    } else if(dateStr === todayKey) {
-      renderForm(dateStr, null);
-    } else {
-      renderEmptyPast(dateStr);
-    }
-  }
-
-  function renderMainLoading(){
-    $('#main').innerHTML = '<p class="loading">Loading...</p>';
   }
 
   function emojiGridHtml(){
@@ -499,8 +249,8 @@
       + '<button type="button" class="rt-btn" data-cmd="bold" title="Bold"><b>B</b></button>'
       + '<button type="button" class="rt-btn" data-cmd="underline" title="Underline"><u>U</u></button>'
       + '<span class="rt-divider"></span>'
-      + '<button type="button" class="rt-btn" data-cmd="insertUnorderedList" title="Bullet list">\u2022\u2261</button>'
-      + '<button type="button" class="rt-btn" data-cmd="insertOrderedList" title="Numbered list">1.\u2261</button>'
+      + '<button type="button" class="rt-btn" data-cmd="insertUnorderedList" title="Bullet list">•≡</button>'
+      + '<button type="button" class="rt-btn" data-cmd="insertOrderedList" title="Numbered list">1.≡</button>'
       + '<span class="rt-divider"></span>'
       + '<select class="rt-size" title="Font size">'
         + '<option value="2">Small</option>'
@@ -508,95 +258,73 @@
         + '<option value="5">Large</option>'
         + '<option value="7">Huge</option>'
       + '</select>'
-      + '<button type="button" class="rt-btn rt-color-btn" title="Text color">\u2726 Color</button>'
+      + '<button type="button" class="rt-btn rt-color-btn" title="Text color">✦ Color</button>'
       + '<div class="color-pop hidden">'+colorPopHtml()+'</div>'
       + '<span class="rt-divider"></span>'
-      + '<button type="button" class="rt-btn rt-emoji-btn" title="Insert emoji">\uD83D\uDE0A</button>'
+      + '<button type="button" class="rt-btn rt-emoji-btn" title="Insert emoji">😊</button>'
       + '<div class="emoji-pop hidden">'+emojiGridHtml()+'</div>'
       + '</div>';
   }
 
-  function sectionBlock(num, key, title, helper, valueHtml, optional){
+  function sectionBlock(num, key, title, helper, optional){
     return '<div class="section">'
       + '<div class="section-head"><span class="num">'+num+'</span><div>'
       + '<h3>'+title+(optional ? ' <span class="opt">Optional</span>' : '')+'</h3>'
       + '<p class="helper">'+helper+'</p></div></div>'
       + toolbarHtml(key)
-      + '<div class="editor rich-content" data-key="'+key+'" contenteditable="true" data-placeholder="Type here...">'+(valueHtml||'')+'</div>'
+      + '<div class="editor rich-content" data-key="'+key+'" contenteditable="true" data-placeholder="Type here..."></div>'
       + '<div class="counter" data-counter-for="'+key+'">0 / 2500</div>'
       + '</div>';
   }
 
-  function renderForm(dateStr, existing){
-    currentAttachments = existing && existing.attachments ? existing.attachments.map(a=>Object.assign({}, a)) : [];
-    const d = parseDateKey(dateStr);
-    const isToday = dateStr === todayKey;
-    const sections = existing ? existing.sections : {};
+  function renderForm(){
+    currentAttachments = [];
+    rawFileStore = {};
     $('#main').innerHTML =
       '<div class="card">'
-      + '<div class="card-head"><h2>'+formatLong(d)+'</h2>'
-      + (!isToday ? '<p class="backdate-note">Logging for a past day \u2014 that is fine if something was missed.</p>' : '')
-      + '</div>'
-      + sectionBlock(1,'contentProduced','Content Produced','What was created today.', sections.contentProduced, false)
-      + sectionBlock(2,'outreach','Outreach &amp; Follow-Up','Leads contacted, calls made, and anything time-sensitive.', sections.outreach, false)
-      + sectionBlock(3,'published','Published &amp; Live','What went out today, and the links, if any.', sections.published, false)
-      + sectionBlock(4,'blockers','Blockers &amp; Requests','Anything you are waiting on from the team.', sections.blockers, true)
-      + sectionBlock(5,'nextDay','Next-Day Priorities','What is queued up next.', sections.nextDay, true)
+      + '<div class="card-head"><h2>'+formatLong(todayDate)+'</h2></div>'
+      + sectionBlock(1,'contentProduced','Content Produced','What was created today.', false)
+      + sectionBlock(2,'outreach','Outreach &amp; Follow-Up','Leads contacted, calls made, and anything time-sensitive.', false)
+      + sectionBlock(3,'published','Published &amp; Live','What went out today, and the links, if any.', false)
+      + sectionBlock(4,'blockers','Blockers &amp; Requests','Anything you are waiting on from the team.', true)
+      + sectionBlock(5,'nextDay','Next-Day Priorities','What is queued up next.', true)
       + '<div class="section attach-section">'
       + '<div class="section-head"><span class="num">+</span><div><h3>Attachments <span class="opt">Optional</span></h3>'
-      + '<p class="helper">Photos, PDFs, documents, or video (MP4, MPEG, MOV) \u2014 up to 100MB each.</p></div></div>'
+      + '<p class="helper">Photos, PDFs, documents, or video (MP4, MPEG, MOV) — up to 100MB each. Sent straight to Slack.</p></div></div>'
       + '<div class="dropzone" id="dropzone"><p>Drag files here, or</p>'
       + '<button type="button" id="chooseFileBtn" class="ghost-btn">Choose files</button>'
       + '<input type="file" id="fileInput" multiple hidden accept="image/*,.heic,.heif,.png,.jpg,.jpeg,.webp,.dng,.arw,application/pdf,.doc,.docx,video/mp4,video/mpeg,video/quicktime,.mov"></div>'
       + '<ul class="attach-list" id="attachList"></ul>'
       + '</div>'
-      + '<div class="submit-row"><button type="button" id="submitBtn" class="primary-btn">'+(existing ? 'Update Checkout' : 'Save Checkout')+'</button>'
+      + '<div class="submit-row"><button type="button" id="submitBtn" class="primary-btn">Send to Slack</button>'
       + '<span class="save-status" id="saveStatus"></span></div>'
       + '</div>';
-    wireForm(dateStr);
+    wireForm();
     renderAttachList();
-  }
-
-  function renderEmptyPast(dateStr){
-    const d = parseDateKey(dateStr);
-    $('#main').innerHTML =
-      '<div class="card empty-card"><h2>'+formatLong(d)+'</h2>'
-      + '<p>Nothing was logged for this day.</p>'
-      + '<button type="button" id="logAnywayBtn" class="ghost-btn">Log it now</button></div>';
-    $('#logAnywayBtn').addEventListener('click', ()=> renderForm(dateStr, null));
   }
 
   const IMAGE_EXT = /\.(heic|heif|png|jpe?g|webp|dng|arw|gif|bmp|tiff?)$/i;
   function iconFor(type, name){
-    if(type && type.indexOf('image/') === 0) return '\uD83D\uDDBC';
-    if(type === 'application/pdf') return '\uD83D\uDCC4';
-    if(type && type.indexOf('video/') === 0) return '\uD83C\uDFAC';
-    if(name && IMAGE_EXT.test(name)) return '\uD83D\uDDBC';
-    return '\uD83D\uDCCE';
+    if(type && type.indexOf('image/') === 0) return '🖼';
+    if(type === 'application/pdf') return '📄';
+    if(type && type.indexOf('video/') === 0) return '🎬';
+    if(name && IMAGE_EXT.test(name)) return '🖼';
+    return '📎';
   }
 
-  function attachmentRowHtml(a, idx, readOnly){
-    let body = '';
-    if(a.dataUrl){
-      body = '<a href="'+a.dataUrl+'" download="'+a.name+'">Download</a>';
-    } else if(a.tooLarge){
-      body = readOnly
-        ? (a.externalLink ? '<a href="'+a.externalLink+'" target="_blank" rel="noopener">Open file \u2197</a>' : '<span class="muted">Reference only \u2014 no file attached</span>')
-        : '<input type="text" class="link-input" data-idx="'+idx+'" placeholder="Paste a Drive/Dropbox link for this file" value="'+(a.externalLink||'')+'">';
-    }
+  function attachmentRowHtml(a, idx){
     return '<li class="attach-row">'
       + '<span class="attach-icon">'+iconFor(a.type, a.name)+'</span>'
       + '<span class="attach-name">'+a.name+'</span>'
       + '<span class="attach-size">'+fileSize(a.size)+'</span>'
-      + '<span class="attach-body">'+body+'</span>'
-      + (readOnly ? '' : '<button type="button" class="remove-btn" data-idx="'+idx+'" title="Remove">\u2715</button>')
+      + '<button type="button" class="remove-btn" data-idx="'+idx+'" title="Remove">✕</button>'
       + '</li>';
   }
 
   function renderAttachList(){
     const list = $('#attachList');
     if(!list) return;
-    list.innerHTML = currentAttachments.map((a,i)=>attachmentRowHtml(a,i,false)).join('');
+    list.innerHTML = currentAttachments.map((a,i)=>attachmentRowHtml(a,i)).join('');
     $$('.remove-btn', list).forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const idx = Number(btn.dataset.idx);
@@ -604,11 +332,6 @@
         if(removed && removed.tempId) delete rawFileStore[removed.tempId];
         currentAttachments.splice(idx,1);
         renderAttachList();
-      });
-    });
-    $$('.link-input', list).forEach(inp=>{
-      inp.addEventListener('input', ()=>{
-        currentAttachments[Number(inp.dataset.idx)].externalLink = inp.value;
       });
     });
   }
@@ -623,20 +346,8 @@
       }
       const tempId = makeTempId();
       rawFileStore[tempId] = file;
-      const alreadyEmbedded = currentAttachments.filter(a=>a.dataUrl).reduce((sum,a)=>sum+a.size,0);
-      if(file.size <= EMBED_LIMIT && (alreadyEmbedded + file.size) <= TOTAL_EMBED_BUDGET){
-        const reader = new FileReader();
-        reader.onload = () => {
-          currentAttachments.push({ tempId, name:file.name, type:file.type, size:file.size, dataUrl: reader.result });
-          renderAttachList();
-        };
-        reader.onerror = () => showToast('Could not read '+file.name+'.', true);
-        reader.readAsDataURL(file);
-      } else {
-        currentAttachments.push({ tempId, name:file.name, type:file.type, size:file.size, tooLarge:true, externalLink:'' });
-        renderAttachList();
-        showToast(file.name+' is large \u2014 add a share link so it is saved with this entry.');
-      }
+      currentAttachments.push({ tempId, name:file.name, type:file.type, size:file.size });
+      renderAttachList();
     });
   }
 
@@ -714,7 +425,7 @@
     });
   }
 
-  function wireForm(dateStr){
+  function wireForm(){
     ['contentProduced','outreach','published','blockers','nextDay'].forEach(wireRichEditor);
 
     const dz = $('#dropzone');
@@ -725,7 +436,7 @@
     ['dragleave','drop'].forEach(evt=> dz.addEventListener(evt, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
     dz.addEventListener('drop', e=> { if(e.dataTransfer.files.length) handleFiles(e.dataTransfer.files); });
 
-    $('#submitBtn').addEventListener('click', () => submitEntry(dateStr));
+    $('#submitBtn').addEventListener('click', submitEntry);
   }
 
   const SECTION_LABELS = {
@@ -737,50 +448,40 @@
   };
 
   function buildSlackText(entry){
-    const lines = ['*Daily Checkout \u2014 ' + entry.date + '*'];
+    const lines = ['*Daily Checkout — ' + entry.date + '*'];
     ['contentProduced','outreach','published','blockers','nextDay'].forEach(key=>{
       const val = htmlToText(entry.sections[key]);
       if(val) lines.push('\n*'+SECTION_LABELS[key]+'*\n'+val);
     });
-    const linkOnly = (entry.attachments||[]).filter(a => !a.dataUrl && a.externalLink);
-    if(linkOnly.length){
-      lines.push('\n*Linked files*');
-      linkOnly.forEach(a => lines.push('\u2022 <'+a.externalLink+'|'+a.name+'>'));
-    }
     return lines.join('\n');
   }
 
   async function pushToSlack(entry){
     const text = buildSlackText(entry);
     const sendable = (entry.attachments||[]).filter(a => a.tempId && rawFileStore[a.tempId]);
-    try{
-      const startRes = await fetch('/api/slack-start', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ text, files: sendable.map(a=>({ tempId:a.tempId, name:a.name, size:a.size })) })
-      });
-      const startData = await startRes.json();
-      if(!startRes.ok) throw new Error(startData.error || 'slack-start failed');
-      if(startData.done) return true;
+    const startRes = await fetch('/api/slack-start', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ text, files: sendable.map(a=>({ tempId:a.tempId, name:a.name, size:a.size })) })
+    });
+    const startData = await startRes.json();
+    if(!startRes.ok) throw new Error(startData.error || 'slack-start failed');
+    if(startData.done) return;
 
-      for(const u of startData.uploads){
-        const file = rawFileStore[u.tempId];
-        if(!file) continue;
-        const putRes = await fetch(u.upload_url, { method:'POST', body:file });
-        if(!putRes.ok) throw new Error('upload failed for '+u.name);
-      }
-      const finishRes = await fetch('/api/slack-finish', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ text, files: startData.uploads.map(u=>({ file_id:u.file_id, name:u.name })) })
-      });
-      if(!finishRes.ok) throw new Error('slack-finish failed');
-      return true;
-    }catch(e){
-      console.error('slack push failed', e);
-      return false;
+    for(const u of startData.uploads){
+      const file = rawFileStore[u.tempId];
+      if(!file) continue;
+      const putRes = await fetch(u.upload_url, { method:'POST', body:file });
+      if(!putRes.ok) throw new Error('upload failed for '+u.name);
     }
+    const finishRes = await fetch('/api/slack-finish', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ text, files: startData.uploads.map(u=>({ file_id:u.file_id, name:u.name })) })
+    });
+    const finishData = await finishRes.json();
+    if(!finishRes.ok) throw new Error(finishData.error || 'slack-finish failed');
   }
 
-  async function submitEntry(dateStr){
+  async function submitEntry(){
     const getHtml = key => $('.editor[data-key="'+key+'"]').innerHTML.trim();
     const getText = key => $('.editor[data-key="'+key+'"]').innerText.trim();
     const sections = {
@@ -791,74 +492,45 @@
       nextDay: getHtml('nextDay')
     };
     if(!getText('contentProduced') && !getText('outreach') && !getText('published')){
-      showToast('Fill in at least the first three sections before saving.', true);
+      showToast('Fill in at least the first three sections before sending.', true);
       return;
     }
     const btn = $('#submitBtn');
     btn.disabled = true;
-    btn.textContent = 'Saving...';
+    btn.textContent = 'Sending...';
     const entry = {
-      date: dateStr,
-      submittedAt: new Date().toISOString(),
+      date: formatLong(todayDate),
       sections: sections,
       attachments: currentAttachments
     };
-    const ok = await saveEntry(dateStr, entry);
-    if(ok){
-      const slackResult = await pushToSlack(entry);
-      if(slackResult === false){
-        showToast('Saved \u2014 checkout logged. Slack post failed, but nothing was lost.', true);
-      } else {
-        showToast('Saved \u2014 checkout logged.');
-      }
-      await refreshSidebar();
-      renderReadOnly(dateStr, entry);
-    } else {
-      showToast('Save failed \u2014 ' + (saveEntry.lastError || 'check your connection and try again.'), true);
+    try{
+      await pushToSlack(entry);
+      showToast('Sent to Slack.');
+      renderSent();
+    }catch(e){
+      console.error('slack push failed', e);
+      showToast('Send failed — ' + String(e.message||e), true);
       btn.disabled = false;
-      btn.textContent = 'Save Checkout';
+      btn.textContent = 'Send to Slack';
     }
   }
 
-  function sectionReadRow(num, title, valueHtml, optional){
-    return '<div class="section read">'
-      + '<div class="section-head"><span class="num">'+num+'</span><div><h3>'+title+(optional ? ' <span class="opt">Optional</span>' : '')+'</h3></div></div>'
-      + '<div class="rich-content read-text">'+(valueHtml ? valueHtml : '<span class="muted">\u2014 none logged \u2014</span>')+'</div>'
-      + '</div>';
-  }
-
-  function renderReadOnly(dateStr, entry){
-    const d = parseDateKey(dateStr);
-    const submitted = entry.submittedAt ? new Date(entry.submittedAt) : null;
-    const attachments = entry.attachments || [];
+  function renderSent(){
     $('#main').innerHTML =
       '<div class="card">'
-      + '<div class="card-head"><h2>'+formatLong(d)+'</h2>'
-      + (submitted ? '<p class="submitted-note">Logged '+submitted.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</p>' : '')
+      + '<div class="card-head"><h2>'+formatLong(todayDate)+'</h2>'
+      + '<p class="submitted-note">Sent to Slack '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</p>'
       + '</div>'
-      + sectionReadRow(1,'Content Produced', entry.sections.contentProduced, false)
-      + sectionReadRow(2,'Outreach &amp; Follow-Up', entry.sections.outreach, false)
-      + sectionReadRow(3,'Published &amp; Live', entry.sections.published, false)
-      + sectionReadRow(4,'Blockers &amp; Requests', entry.sections.blockers, true)
-      + sectionReadRow(5,'Next-Day Priorities', entry.sections.nextDay, true)
-      + '<div class="section"><div class="section-head"><span class="num">+</span><div><h3>Attachments</h3></div></div>'
-      + (attachments.length
-          ? '<ul class="attach-list read-only">'+attachments.map((a,i)=>attachmentRowHtml(a,i,true)).join('')+'</ul>'
-          : '<p class="read-text"><span class="muted">\u2014 none \u2014</span></p>')
-      + '</div>'
-      + '<div class="submit-row"><button type="button" id="editBtn" class="ghost-btn">Edit this entry</button></div>'
+      + '<p class="read-text">This checkout has been posted. Need to log another one?</p>'
+      + '<div class="submit-row"><button type="button" id="newEntryBtn" class="ghost-btn">Log another entry</button></div>'
       + '</div>';
-    $('#editBtn').addEventListener('click', ()=> renderForm(dateStr, entry));
+    $('#newEntryBtn').addEventListener('click', renderForm);
   }
 
-  async function init(){
+  function init(){
     $('#todayLabel').textContent = formatLong(todayDate);
-    $('#todayBtn').addEventListener('click', ()=> { selectDate(todayKey); $('#sidebar').classList.remove('open'); });
-    const menuBtn = $('#menuBtn');
-    if(menuBtn) menuBtn.addEventListener('click', ()=> $('#sidebar').classList.toggle('open'));
     document.addEventListener('click', ()=> $$('.emoji-pop, .color-pop').forEach(p=>p.classList.add('hidden')));
-    await refreshSidebar();
-    await selectDate(todayKey);
+    renderForm();
   }
 
   document.addEventListener('DOMContentLoaded', init);
