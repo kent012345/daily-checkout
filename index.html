@@ -296,6 +296,7 @@
       + '<input type="file" id="fileInput" multiple hidden accept="image/*,.heic,.heif,.png,.jpg,.jpeg,.webp,.dng,.arw,application/pdf,.doc,.docx,video/mp4,video/mpeg,video/quicktime,.mov"></div>'
       + '<ul class="attach-list" id="attachList"></ul>'
       + '</div>'
+      + sectionBlock(6,'videoLinks','Video Links','Paste Google Drive (or similar) links to any videos here — do not upload video files directly in Attachments above, they are too large to send automatically.', true)
       + '<div class="submit-row"><button type="button" id="submitBtn" class="primary-btn">Send to Slack</button>'
       + '<span class="save-status" id="saveStatus"></span></div>'
       + '</div>';
@@ -426,7 +427,7 @@
   }
 
   function wireForm(){
-    ['contentProduced','outreach','published','blockers','nextDay'].forEach(wireRichEditor);
+    ['contentProduced','outreach','published','blockers','nextDay','videoLinks'].forEach(wireRichEditor);
 
     const dz = $('#dropzone');
     const fi = $('#fileInput');
@@ -444,12 +445,13 @@
     outreach: 'Outreach & Follow-Up',
     published: 'Published & Live',
     blockers: 'Blockers & Requests',
-    nextDay: 'Next-Day Priorities'
+    nextDay: 'Next-Day Priorities',
+    videoLinks: 'Video Links'
   };
 
   function buildSlackText(entry){
     const lines = ['*Daily Checkout — ' + entry.date + '*'];
-    ['contentProduced','outreach','published','blockers','nextDay'].forEach(key=>{
+    ['contentProduced','outreach','published','blockers','nextDay','videoLinks'].forEach(key=>{
       const val = htmlToText(entry.sections[key]);
       if(val) lines.push('\n*'+SECTION_LABELS[key]+'*\n'+val);
     });
@@ -532,7 +534,8 @@
       outreach: getHtml('outreach'),
       published: getHtml('published'),
       blockers: getHtml('blockers'),
-      nextDay: getHtml('nextDay')
+      nextDay: getHtml('nextDay'),
+      videoLinks: getHtml('videoLinks')
     };
     if(!getText('contentProduced') && !getText('outreach') && !getText('published')){
       showToast('Fill in at least the first three sections before sending.', true);
